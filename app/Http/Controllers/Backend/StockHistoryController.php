@@ -1,0 +1,190 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use Exception;
+use Carbon\Carbon;
+use App\Models\Vendor;
+use App\Models\Product;
+use App\Models\StockHistory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
+class StockHistoryController extends Controller
+{
+    public function index()
+    {
+        $stocks = StockHistory::with('product')->with('vendor')->orderBy('id', 'desc')->get();
+        return view('backend.pages.stock.index', compact('stocks'));
+    }
+
+    public function create()
+    {
+        //$categories = Category::orderBy('id', 'desc')->get();
+        $data = [
+            'products' => Product::orderBy('id', 'desc')->get(),
+            'vendors' => Vendor::orderBy('id', 'desc')->get(),
+        ];
+        return view('backend.pages.stock.create', compact('data'));
+    }
+
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            // Validation
+            $validator = Validator::make($request->all(), [
+                'product_id' => 'required',
+                'vendor_id' => 'required',
+                'quantity' => 'required',
+                'total_cost' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                // Validation failed
+                throw new Exception($validator->errors()->first());
+            }
+
+            // Ensure date is provided, otherwise use current date
+            $date = $request->input('date') ? $request->input('date') : Carbon::now();
+
+            // Create Product Stock
+            StockHistory::create([
+                'product_id' => $request->input('product_id'),
+                'vendor_id' => $request->input('vendor_id'),
+                'quantity' => $request->input('quantity'),
+                'date' => $date,
+                'total_cost' => $request->input('total_cost'),
+            ]);
+
+            // Update Product Stock
+
+            $product = Product::findOrFail($request->input('product_id'));
+            $product->update([
+                'stock' => $product->stock + $request->input('quantity'),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('stock.index')->with('success', 'Product Stock created successfully.');
+        } catch (Exception $e) {
+            // Handle exceptions
+            //dd($e->getMessage());
+            DB::rollBack();
+            return redirect()
+                ->route('stock.create')
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Product Stock creation failed. ' . $e->getMessage());
+        }
+    }
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        //$categories = Category::orderBy('id', 'desc')->get();
+        return view('backend.pages.product.edit', compact('product', 'categories'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+
+            // dd($request->all());
+            // Validation
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string|max:100|unique:products',
+                'category_id' => 'required',
+                'price' => 'required',
+                'discount' => 'required',
+                'content_details' => 'string|max:255',
+                'photo_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            if ($product->title == $request->input('title')) {
+                $validator = Validator::make($request->all(), [
+                    'category_id' => 'required',
+                    'price' => 'required',
+                    'discount' => 'required',
+                    'content_details' => 'string|max:255',
+                    'photo_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                ]);
+            } else {
+                $validator = Validator::make($request->all(), [
+                    'title' => 'required|string|max:100|unique:products',
+                    'category_id' => 'required',
+                    'price' => 'required',
+                    'discount' => 'required',
+                    'content_details' => 'string|max:255',
+                    'photo_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                ]);
+            }
+
+            if ($validator->fails()) {
+                // Validation failed
+                //throw new Exception();
+                throw new Exception($validator->errors()->first());
+            }
+
+            // Image Processing
+            if ($request->hasFile('photo_path') && $request->file('photo_path')->isValid()) {
+                $img = $request->file('photo_path');
+                $t = time();
+                $file_name = $img->getClientOriginalName();
+                $img_name = "product_{$t}_{$file_name}";
+                $img_url = "uploads/product/{$img_name}";
+
+                // Delete Old Image
+                if ($product->image) {
+                    $imagePath = public_path($product->image);
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+                }
+
+                // Upload File
+                $img->move(public_path('uploads/product/'), $img_name);
+                $product->update([
+                    'title' => $request->input('title'),
+                    'category_id' => $request->input('category_id'),
+                    'price' => $request->input('price'),
+                    'discount' => $request->input('discount'),
+                    'description' => $request->input('content_details'),
+                    'image' => $img_url,
+                ]);
+            } else {
+                //dd($request->all());
+                $oldImage = $request->input('old_photo_path');
+                $product->update([
+                    'title' => $request->input('title'),
+                    'category_id' => $request->input('category_id'),
+                    'price' => $request->input('price'),
+                    'discount' => $request->input('discount'),
+                    'description' => $request->input('content_details'),
+                    'image' => $oldImage,
+                ]);
+            }
+
+            return redirect()->route('product.index')->with('success', 'Product updated successfully.');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('product.edit', $id)
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Product updated failed.' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $product->delete();
+            return redirect()->route('product.index')->with('success', 'product deleted successfully.');
+        } catch (Exception $e) {
+            return redirect()->route('product.index')->with('error', 'product deleted failed.');
+        }
+    }
+}
