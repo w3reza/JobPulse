@@ -16,11 +16,25 @@
 						<a class="nav-link" aria-current="page" href="index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" aria-current="page" href="jobs.html">Find Jobs</a>
+						<a class="nav-link" aria-current="page" href="{{route('jobs')}}">Find Jobs</a>
 					</li>
 				</ul>
-				<a class="btn btn-outline-primary me-2" href="login.html" type="submit">Login</a>
-				<a class="btn btn-primary" href="post-job.html" type="submit">Post a Job</a>
+                @if (Auth::check())
+                    <div class="dropdown">
+                        <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="{{route('account.profile')}}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{{route('account.logout')}}">Logout</a></li>
+                        </ul>
+                    </div>
+
+
+                @else
+				<a class="btn btn-outline-primary me-2" href="{{route('account.login')}}" type="submit">Login</a>
+				<a class="btn btn-primary" href="{{route('account.registration')}}" type="submit">Register</a>
+                @endif
 			</div>
 		</div>
 	</nav>

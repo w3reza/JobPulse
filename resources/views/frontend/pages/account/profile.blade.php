@@ -1,6 +1,6 @@
-@extends('front.layouts.app')
-
-@section('main')
+@extends('frontend.layouts.app')
+@section('title', 'Job Pulse| Profile')
+@section('content')
 <section class="section-5 bg-2">
     <div class="container py-5">
         <div class="row">
@@ -15,10 +15,10 @@
         </div>
         <div class="row">
             <div class="col-lg-3">
-                @include('front.account.sidebar')
+                @include('frontend.pages.account.sidebar')
             </div>
             <div class="col-lg-9">
-                @include('front.message')
+                @include('frontend.pages.message')
                 <div class="card border-0 shadow mb-4">
                     <form action="" method="post" id="userForm" name="userForm">
                         <div class="card-body  p-4">
@@ -40,7 +40,7 @@
                             <div class="mb-4">
                                 <label for="" class="mb-2">Mobile</label>
                                 <input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" value="{{ $user->mobile }}">
-                            </div>                        
+                            </div>
                         </div>
                         <div class="card-footer  p-4">
                             <button type="submit" class="btn btn-primary">Update</button>
@@ -66,7 +66,7 @@
                                 <label for="" class="mb-2">Confirm Password*</label>
                                 <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="form-control">
                                 <p></p>
-                            </div>                        
+                            </div>
                         </div>
                         <div class="card-footer  p-4">
                             <button type="submit" class="btn btn-primary">Update</button>

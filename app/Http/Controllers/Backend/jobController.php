@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
-
 use Exception;
 use Carbon\Carbon;
 use App\Models\Job;
@@ -16,8 +15,21 @@ class jobController extends Controller
 {
     public function index()
     {
-        $UserId = auth()->user()->id;
-        $jobs = Job::orderBy('id', 'desc')->where('user_id', $UserId)->with('category', 'skills')->get();
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Check if the user has the "superadmin" role
+        if ($user->hasRole('superadmin')) {
+            // If the user is a superadmin, get all jobs
+            $jobs = Job::orderBy('id', 'desc')->with('category', 'skills')->get();
+        } else {
+            // If the user is not a superadmin, get jobs based on user_id
+            $jobs = Job::orderBy('id', 'desc')
+                ->where('user_id', $user->id)
+                ->with('category', 'skills')
+                ->get();
+        }
+
         return view('backend.pages.job.index', compact('jobs'));
     }
 

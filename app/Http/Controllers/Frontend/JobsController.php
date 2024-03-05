@@ -53,9 +53,9 @@ class JobsController extends Controller
     }
 
     // Search using experience
-    if(!empty($request->experience)) {
-        $jobs = $jobs->where('experience',$request->experience);
-    }
+    // if(!empty($request->experience)) {
+    //     $jobs = $jobs->where('experience',$request->experience);
+    // }
 
 
     $jobs = $jobs->with(['skills','category']);
@@ -126,9 +126,9 @@ public function applyJob(Request $request) {
     }
 
     // you can not apply on your own job
-    $employer_id = $job->user_id;
+    $company_id = $job->user_id;
 
-    if ($employer_id == Auth::user()->id) {
+    if ($company_id == Auth::user()->id) {
         $message = 'You can not apply on your own job.';
         session()->flash('error',$message);
         return response()->json([
@@ -155,13 +155,15 @@ public function applyJob(Request $request) {
     $application = new JobApplication();
     $application->job_id = $id;
     $application->user_id = Auth::user()->id;
-    $application->employer_id = $employer_id;
+    $application->company_id = $company_id;
     $application->applied_date = now();
+    $application->status = 'pending';
     $application->save();
 
 
     // Send Notification Email to Employer
-    $employer = User::where('id',$employer_id)->first();
+    /*
+    $employer = User::where('id',$company_id)->first();
 
     $mailData = [
         'employer' => $employer,
@@ -170,10 +172,11 @@ public function applyJob(Request $request) {
     ];
 
     Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
-
+*/
     $message = 'You have successfully applied.';
 
     session()->flash('success',$message);
+
 
     return response()->json([
         'status' => true,

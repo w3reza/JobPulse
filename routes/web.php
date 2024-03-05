@@ -145,45 +145,7 @@ Route::post('/user/{id}', [JobController::class, 'update'])->name('user.update')
 Route::delete('/user/{id}', [JobController::class, 'destroy'])->name('user.destroy');
 
 
-/*
-|--------------------------------------------------------------------------
-| Vendor Routes
-|--------------------------------------------------------------------------
-*/
 
-Route::get('/vendor', [VendorController::class, 'index'])->name('vendor.index');
-Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor.create');
-Route::post('/vendor/store', [VendorController::class, 'store'])->name('vendor.store');
-Route::get('/vendor/edit/{id}', [VendorController::class, 'edit'])->name('vendor.edit');
-Route::post('/vendor/{id}', [VendorController::class, 'update'])->name('vendor.update');
-Route::delete('/vendor/{id}', [VendorController::class, 'destroy'])->name('vendor.destroy');
-
-
-/*
-|--------------------------------------------------------------------------
-| Product Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
-Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
-Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
-Route::post('/product/{id}', [ProductController::class, 'update'])->name('product.update');
-Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
-
-/*
-|--------------------------------------------------------------------------
-| Product Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/stock', [StockHistoryController::class, 'index'])->name('stock.index');
-Route::get('/stock/create', [StockHistoryController::class, 'create'])->name('stock.create');
-Route::post('/stock/store', [StockHistoryController::class, 'store'])->name('stock.store');
-Route::get('/stock/edit/{id}', [StockHistoryController::class, 'edit'])->name('stock.edit');
-Route::post('/stock/{id}', [StockHistoryController::class, 'update'])->name('stock.update');
-Route::delete('/stock/{id}', [StockHistoryController::class, 'destroy'])->name('stock.destroy');
 
 
 
@@ -218,7 +180,33 @@ Route::get('/jobs/detail/{id}',[JobsController::class,'detail'])->name('jobDetai
 Route::post('/apply-job',[JobsController::class,'applyJob'])->name('applyJob');
 Route::post('/save-job',[JobsController::class,'saveJob'])->name('saveJob');
 
-Route::post('/user/create', [UserController::class, 'Store'])->name('user.store');
+Route::get('/registration', [UserController::class, 'create'])->name('account.registration');
+Route::get('/userLogin', [UserController::class, 'userLogin'])->name('account.login');
+Route::post('/user/create', [UserController::class, 'Store'])->name('account.processRegistration');
+Route::post('/authenticate', [UserController::class, 'authenticate'])->name('account.authenticate');
+Route::get('/account/profile', [UserController::class, 'profile'])->name('account.profile');
+Route::get('/user/logout', [UserController::class, 'logout'])->name('account.logout');
+
+// Authenticated Routes
+Route::group(['middleware' => 'auth'], function(){
+    //Route::get('/profile',[AccountController::class,'profile'])->name('account.profile');
+    Route::put('/update-profile',[AccountController::class,'updateProfile'])->name('account.updateProfile');
+    //Route::get('/logout',[AccountController::class,'logout'])->name('account.logout');
+    Route::post('/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic');
+    Route::get('/create-job',[AccountController::class,'createJob'])->name('account.createJob');
+    //Route::post('/save-job',[AccountController::class,'saveJob'])->name('account.saveJob');
+    Route::get('/my-jobs',[AccountController::class,'myJobs'])->name('account.myJobs');
+    Route::get('/my-jobs/edit/{jobId}',[AccountController::class,'editJob'])->name('account.editJob');
+    Route::post('/update-job/{jobId}',[AccountController::class,'updateJob'])->name('account.updateJob');
+    Route::post('/delete-job',[AccountController::class,'deleteJob'])->name('account.deleteJob');
+    Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');
+
+    Route::post('/remove-job-application',[AccountController::class,'removeJobs'])->name('account.removeJobs');
+    Route::get('/saved-jobs',[AccountController::class,'savedJobs'])->name('account.savedJobs');
+    Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
+    Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');
+
+});
 
 
 

@@ -78,15 +78,6 @@
 
 
 
-
-                <li class="nav-header">Job BASIC Settings</li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fa fa-map-marker nav-icon"></i>
-                        <p>Location</p>
-                    </a>
-                </li>
                 <li class="nav-header">JOB SECTION</li>
                 <li class="nav-item">
                     <a href="{{ route('job.index') }}" class="nav-link">
@@ -117,35 +108,22 @@
 
                 <li class="nav-header">OTHERS</li>
                 <li class="nav-item">
-                    <a href="pages/calendar.html" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i>
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-envelope"></i>
                         <p>
-                            Calendar
-                            <span class="badge badge-info right">2</span>
+                            Pages
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
+
                 </li>
-                <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
-                        <i class="nav-icon far fa-image"></i>
-                        <p>
-                            Gallery
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages/kanban.html" class="nav-link">
-                        <i class="nav-icon fas fa-columns"></i>
-                        <p>
-                            Kanban Board
-                        </p>
-                    </a>
-                </li>
+
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>
-                            Mailbox
+                            Blog
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -153,21 +131,16 @@
                         <li class="nav-item">
                             <a href="pages/mailbox/mailbox.html" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Inbox</p>
+                                <p>Create Post</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="pages/mailbox/compose.html" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Compose</p>
+                                <p>Category</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="pages/mailbox/read-mail.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Read</p>
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
                 <li class="nav-header">Settings</li>
@@ -176,7 +149,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>
-                            Extras
+                            Plugin
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
