@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\backendController;
 use App\Http\Controllers\Backend\JobTypeController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\StockHistoryController;
+use App\Http\Controllers\Backend\JobApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +125,18 @@ Route::post('/job/{id}', [JobController::class, 'update'])->name('job.update');
 Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.destroy');
 
 
+/*
+|--------------------------------------------------------------------------
+| Job Application Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/JobApplication', [JobApplicationController::class, 'index'])->name('job.application.index');
+Route::get('/JobApplication/edit/{id}', [JobApplicationController::class, 'update'])->name('job.application.edit');
+Route::post('/JobApplication/edit/{id}', [JobApplicationController::class, 'update'])->name('job.application.update');
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -187,26 +200,6 @@ Route::post('/authenticate', [UserController::class, 'authenticate'])->name('acc
 Route::get('/account/profile', [UserController::class, 'profile'])->name('account.profile');
 Route::get('/user/logout', [UserController::class, 'logout'])->name('account.logout');
 
-// Authenticated Routes
-Route::group(['middleware' => 'auth'], function(){
-    //Route::get('/profile',[AccountController::class,'profile'])->name('account.profile');
-    Route::put('/update-profile',[AccountController::class,'updateProfile'])->name('account.updateProfile');
-    //Route::get('/logout',[AccountController::class,'logout'])->name('account.logout');
-    Route::post('/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic');
-    Route::get('/create-job',[AccountController::class,'createJob'])->name('account.createJob');
-    //Route::post('/save-job',[AccountController::class,'saveJob'])->name('account.saveJob');
-    Route::get('/my-jobs',[AccountController::class,'myJobs'])->name('account.myJobs');
-    Route::get('/my-jobs/edit/{jobId}',[AccountController::class,'editJob'])->name('account.editJob');
-    Route::post('/update-job/{jobId}',[AccountController::class,'updateJob'])->name('account.updateJob');
-    Route::post('/delete-job',[AccountController::class,'deleteJob'])->name('account.deleteJob');
-    Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');
-
-    Route::post('/remove-job-application',[AccountController::class,'removeJobs'])->name('account.removeJobs');
-    Route::get('/saved-jobs',[AccountController::class,'savedJobs'])->name('account.savedJobs');
-    Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
-    Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');
-
-});
 
 
 

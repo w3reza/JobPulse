@@ -2,7 +2,7 @@
 <header>
 	<nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3">
 		<div class="container">
-            <a href="./" class="brand-link">
+            <a href="{{route('home')}}" class="brand-link">
                 <img src="{{ asset('images/job-pulse-logo.png') }}" alt="Logo"
                     class="" style="width: 80%">
 

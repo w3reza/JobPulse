@@ -98,9 +98,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('job.application.index')}}" class="nav-link">
                         <i class="fas fa-users nav-icon"></i>
-                        <p>Cadidate List</p>
+                        <p>Alplication List</p>
                     </a>
                 </li>
 

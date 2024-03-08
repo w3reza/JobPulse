@@ -146,7 +146,13 @@ class UserController extends Controller
         if ($validator->passes()) {
 
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                return redirect()->route('account.profile');
+                if (Auth::user()->hasRole('company')) {
+                    return redirect()->route('admin.dashboard');
+                }
+                if (Auth::user()->hasRole('candidate')) {
+                    return redirect()->route('jobs');
+                }
+
             } else {
                 return redirect()->route('account.login')->with('error','Either Email/Password is incorrect');
             }

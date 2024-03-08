@@ -86,7 +86,7 @@ $("#userForm").submit(function(e){
     e.preventDefault();
 
     $.ajax({
-        url: '{{ route("account.updateProfile") }}',
+        url: '#',
         type: 'put',
         dataType: 'json',
         data: $("#userForm").serializeArray(),
@@ -143,7 +143,7 @@ $("#changePasswordForm").submit(function(e){
     e.preventDefault();
 
     $.ajax({
-        url: '{{ route("account.updatePassword") }}',
+        url: '#',
         type: 'post',
         dataType: 'json',
         data: $("#changePasswordForm").serializeArray(),
